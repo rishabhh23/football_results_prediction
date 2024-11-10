@@ -1,49 +1,33 @@
-import os
 import pandas as pd
 
-def load_data():
-    # Check if files exist before loading
-    # if not os.path.exists("../data/raw/results.csv"):
-    #     raise FileNotFoundError("results.csv not found in data/raw/")
-    # if not os.path.exists("../data/raw/shootouts.csv"):
-    #     raise FileNotFoundError("shootouts.csv not found in data/raw/")
-    # if not os.path.exists("../data/raw/goalscorers.csv"):
-    #     raise FileNotFoundError("goalscorers.csv not found in data/raw/")
+def load_data(file_path):
+    return pd.read_csv(file_path)
 
-    # Load datasets
-    results_df = pd.read_csv("C:/Users/rish2/OneDrive/Desktop/project1/data/raw/results.csv")
-    shootouts_df = pd.read_csv("C:/Users/rish2/OneDrive/Desktop/project1/data/raw/shootouts.csv")
-    goalscorers_df = pd.read_csv("C:/Users/rish2/OneDrive/Desktop/project1/data/raw/goalscorers.csv")
 
-    return results_df, shootouts_df, goalscorers_df
+def calculate_team_stats(df):
+    teams = pd.concat([df['home_team'], df['away_team']]).unique()
+    stats = {}
 
-def preprocess_results(results_df, shootouts_df):
-    # Create the 'outcome' column based on scores
-    def determine_outcome(row):
-        if row['home_score'] > row['away_score']:
-            return 'home_win'
-        elif row['home_score'] < row['away_score']:
-            return 'away_win'
-        else:
-            return 'draw'
+    for team in teams:
+        home_games = df[df['home_team'] == team]
+        away_games = df[df['away_team'] == team]
 
-    results_df['outcome'] = results_df.apply(determine_outcome, axis=1)
+        total_games = len(home_games) + len(away_games)
+        total_wins = len(home_games[home_games['home_score'] > home_games['away_score']]) + len(
+            away_games[away_games['away_score'] > away_games['home_score']])
+        total_draws = len(home_games[home_games['home_score'] == home_games['away_score']]) + len(
+            away_games[away_games['home_score'] == away_games['away_score']])
 
-    # Merge shootouts to assign winners for drawn matches
-    results_df = pd.merge(results_df, shootouts_df[['date', 'home_team', 'away_team', 'winner']],
-                          on=['date', 'home_team', 'away_team'], how='left')
+        win_rate = total_wins / total_games if total_games > 0 else 0
+        avg_home_score = home_games['home_score'].mean() if not home_games.empty else 0
+        avg_away_score = away_games['away_score'].mean() if not away_games.empty else 0
+        avg_score = (avg_home_score + avg_away_score) / 2
 
-    # Update outcome based on shootout results
-    def update_outcome(row):
-        if row['outcome'] == 'draw' and pd.notna(row['winner']):
-            return 'home_win' if row['winner'] == row['home_team'] else 'away_win'
-        return row['outcome']
+        stats[team] = {
+            'win_rate': win_rate,
+            'avg_score': avg_score,
+            'total_games': total_games,
+            'draw_rate': total_draws / total_games if total_games > 0 else 0
+        }
 
-    results_df['outcome'] = results_df.apply(update_outcome, axis=1)
-
-    return results_df
-
-# Example usage
-# results_df, shootouts_df, _ = load_data()
-# results_df = preprocess_results(results_df, shootouts_df)
-# print(results_df.info())
+    return stats

@@ -1,10 +1,10 @@
-# runs the entire pipeline and flow of the application
-from src.data_preprocessing import load_data, preprocess_results
+from src.data_preprocessing import load_data, calculate_team_stats
 from src.model_training import train_model
 
-# Load and preprocess data
-results_df, shootouts_df, goalscorers_df = load_data()
-results_df = preprocess_results(results_df, shootouts_df)
+# Load data and calculate team stats
+data_path = "C:/Users/rish2/OneDrive/Desktop/project1/data/raw/results.csv"
+df = load_data(data_path)
+team_stats = calculate_team_stats(df)
 
-# Train and evaluate the model
-train_model(results_df)
+# Train model
+train_model(data_path)
