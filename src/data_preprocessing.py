@@ -1,27 +1,21 @@
 import os
 import pandas as pd
 
-
 def load_data():
     # Check if files exist before loading
-    if not os.path.exists("../data/raw/results.csv"):
-        raise FileNotFoundError("results.csv not found in data/raw/")
-    if not os.path.exists("../data/raw/shootouts.csv"):
-        raise FileNotFoundError("shootouts.csv not found in data/raw/")
-    if not os.path.exists("../data/raw/goalscorers.csv"):
-        raise FileNotFoundError("goalscorers.csv not found in data/raw/")
+    # if not os.path.exists("../data/raw/results.csv"):
+    #     raise FileNotFoundError("results.csv not found in data/raw/")
+    # if not os.path.exists("../data/raw/shootouts.csv"):
+    #     raise FileNotFoundError("shootouts.csv not found in data/raw/")
+    # if not os.path.exists("../data/raw/goalscorers.csv"):
+    #     raise FileNotFoundError("goalscorers.csv not found in data/raw/")
 
     # Load datasets
-    results_df = pd.read_csv("../data/raw/results.csv")
-    shootouts_df = pd.read_csv("../data/raw/shootouts.csv")
-    goalscorers_df = pd.read_csv("../data/raw/goalscorers.csv")
+    results_df = pd.read_csv("C:/Users/rish2/OneDrive/Desktop/project1/data/raw/results.csv")
+    shootouts_df = pd.read_csv("C:/Users/rish2/OneDrive/Desktop/project1/data/raw/shootouts.csv")
+    goalscorers_df = pd.read_csv("C:/Users/rish2/OneDrive/Desktop/project1/data/raw/goalscorers.csv")
 
     return results_df, shootouts_df, goalscorers_df
-
-# Example usage (optional)
-# if __name__ == "__main__":
-#     results_df, shootouts_df, goalscorers_df = load_data()
-#     print("Data loaded successfully")
 
 def preprocess_results(results_df, shootouts_df):
     # Create the 'outcome' column based on scores
@@ -50,6 +44,6 @@ def preprocess_results(results_df, shootouts_df):
     return results_df
 
 # Example usage
-results_df, shootouts_df, _ = load_data()
-results_df = preprocess_results(results_df, shootouts_df)
+# results_df, shootouts_df, _ = load_data()
+# results_df = preprocess_results(results_df, shootouts_df)
 # print(results_df.info())

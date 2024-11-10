@@ -1,5 +1,6 @@
 import matplotlib.pyplot as plt
 import seaborn as sns
+import numpy as np
 from sklearn.metrics import ConfusionMatrixDisplay
 
 def plot_confusion_matrix(model, X_test, y_test):
