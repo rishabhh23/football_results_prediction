@@ -30,4 +30,4 @@ def predict_match_winner(team1, team2):
 
 
 # Example usage
-print(predict_match_winner("Scotland", "Argentina"))
+print(predict_match_winner("Kazakhstan", "Austria"))
