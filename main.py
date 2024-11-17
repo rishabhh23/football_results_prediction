@@ -8,6 +8,7 @@ import matplotlib.pyplot as plt
 import seaborn as sns
 import numpy as np
 from src.data_preprocessing import load_data, calculate_team_stats, prepare_training_data
+from src.visualization import plot_class_distribution, plot_cost_distribution
 
 # Load data and calculate team stats
 data_path = "C:/Users/rish2/OneDrive/Desktop/project1/data/raw/results_copy.csv"
@@ -123,9 +124,24 @@ def train_model(training_data_path):
     plt.ylabel("Actual Class")
     plt.show()
 
-    return model, team_stats, scaler
+    # Return the training labels for visualization
+    return model, team_stats, scaler, y_train
 
-# Example usage
-train_model(data_path)
-print("Predicted Match Winner is:" + predict_match_winner("Kazakhstan", "Austria"))
+if __name__ == "__main__":
+    # Train the model and retrieve y_train
+    model, team_stats, scaler, y_train = train_model(data_path)
 
+    # Plot class distribution in y_train
+    plot_class_distribution(y_train)
+
+    # Define cost data and plot cost distribution
+    # cost_data = {
+    #     'Production': 300,
+    #     'Shipping': 150,
+    #     'Marketing': 100,
+    #     'Miscellaneous': 50
+    # }
+    # plot_cost_distribution(cost_data)  # Visualize cost distribution
+
+    # Example prediction usage
+    print("Predicted Match Winner is:", predict_match_winner("Kazakhstan", "Austria"))
